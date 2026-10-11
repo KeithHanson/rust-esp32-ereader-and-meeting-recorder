@@ -1,0 +1,13 @@
+[package]
+name = "ws397-ui"
+version = "0.1.0"
+edition = "2021"
+description = "Host simulator for the ws397-rust ereader UI layer"
+
+[dependencies]
+embedded-graphics = "0.8"
+embedded-text = "0.7"
+epub = "2.1"
+u8g2-fonts = { version = "0.8", features = ["embedded_graphics_textstyle"] }
+zip = { version = "2", default-features = false, features = ["deflate"] }
+quick-xml = "0.37"

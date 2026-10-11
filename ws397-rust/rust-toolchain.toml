@@ -1,0 +1,8 @@
+[toolchain]
+# espup-managed forked rustc with the `xtensa-esp32s3-espidf` target.
+# NOTE: this harness exports `RUSTUP_TOOLCHAIN=stable` (mise), which outranks
+# rust-toolchain.toml — run esp builds with `env -u RUSTUP_TOOLCHAIN cargo ...`
+# or from a shell without that export. Xtensa std is built from source
+# ([unstable] build-std in .cargo/config.toml) since espup 0.18 retired
+# prebuilt stds.
+channel = "esp"

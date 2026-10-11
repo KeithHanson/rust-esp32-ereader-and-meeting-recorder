@@ -1,0 +1,27 @@
+[build]
+target = "xtensa-esp32s3-espidf"
+# espup 0.18 ships no prebuilt Xtensa std (esp-rs/std-build retired), so
+# core/std are compiled from source via `build-std` against the esp rustc fork.
+# espidf_time64 must be on EVERY rustc invocation incl. build-std (struct layout
+# in esp-idf-svc bindings), hence [build] here rather than the target section.
+rustflags = ["--cfg", "espidf_time64"]
+
+[target.'cfg(target_os = "espidf")']
+linker = "ldproxy"
+runner = "espflash flash --monitor"
+rustflags = [ "--cfg",  "espidf_time64",
+  # Factory app uses VID:PID 303a:4001 "Board CDC" (TinyUSB app descriptor).
+  # Our image must re-enumerate as 303a:1001 "USB JTAG/serial debug unit" so
+  # espflash/esptool can auto-reset it (their reset logic special-cases 1001).
+  # TODO(verify): remove once the built image's actual enumeration is confirmed.
+  "--cfg", "espidf_usb_serial_jtag_conn_support",
+]
+
+[unstable]
+build-std = ["std", "panic_abort"]
+
+[env]
+MCU = "esp32s3"
+ESP_IDF_VERSION = "v5.5.5"
+ESP_IDF_TOOLS_INSTALL_DIR = "workspace"
+CARGO_WORKSPACE_DIR = { value = "", relative = true }
